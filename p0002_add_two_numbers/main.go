@@ -1,4 +1,4 @@
-package p0002addtwonumbers
+package main
 
 import "fmt"
 
@@ -40,8 +40,8 @@ func llistToSlic(ll *ListNode) []int {
 	return s
 }
 
-func addLLists(a, b *ListNode) *ListNode {
-}
+// func addLLists(a, b *ListNode) *ListNode {
+// }
 
 func printLList(ll *ListNode) {
 
@@ -77,3 +77,33 @@ func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
 }
 
 // @lc code=end
+
+func main() {
+	tests := []struct {
+		title    string
+		input_1  []int
+		input_2  []int
+		expected []int
+	}{
+		{
+			input_1:  []int{2, 4, 3},
+			input_2:  []int{5, 6, 4},
+			expected: []int{7, 0, 8},
+		},
+	}
+
+	for _, test := range tests {
+		node_1 := slictToLList(test.input_1)
+		// node_2 := slictToLList(test.input_2)
+
+		fmt.Printf("Before:\n")
+		printLList(node_1)
+
+		fmt.Printf("After:\n")
+		node_1 = revertLList(node_1)
+		printLList(node_1)
+
+		fmt.Printf("To Slice:\n")
+		fmt.Printf("%v", llistToSlic(node_1))
+	}
+}

@@ -1,6 +1,7 @@
 package main
 
 import "fmt"
+
 type bot interface {
 	getGreeting() string
 }
@@ -8,7 +9,6 @@ type bot interface {
 type englishBot struct{}
 
 type spanishBot struct{}
-
 
 func main() {
 	eb := englishBot{}
