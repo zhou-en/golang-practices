@@ -10,22 +10,24 @@ Personal Go practice code: course exercises (`cards`, `structs`, `map`, `interfa
 
 One `go.mod` at the root (`github.com/zhou-en/golang-practices`). Each top-level folder is its own package, so it builds and runs on its own. A compile error in one folder does not stop `go run` of another. Do not add a `go.mod` inside a folder: a nested module drops that folder out of the root module.
 
+## Commands
+
+The `Makefile` is the entry point for every project command; `make` lists the targets. `P` takes a LeetCode number (`P=1` finds `p0001_*`) or a folder name (`P=cards`). Without `P`, `test`, `vet`, and `fmt` run on `./...`. Each target prints the `go` command it runs. Add new project commands as Makefile targets with a `## description` comment so `make help` lists them. The Makefile must work with GNU Make 3.81 (macOS default): no nested parentheses inside `$(shell ...)`, and no `#` in variable values.
+
 ```sh
-go run ./p0001_two_sum               # run one problem (from the repo root)
-cd p0001_two_sum && go run .         # same, from inside the folder; `go run main.go` misses other files
-go test ./p0001_two_sum              # test one folder
-go test -race ./batch-job
-go test -run 'TestRunBatch/Empty_task_list' -v ./batch-job   # one subtest; spaces become underscores
-go vet ./... && go test ./...        # whole repo
+make new N=15 T=3sum                                 # create p0015_3sum/ (calls new.sh)
+make test P=1                                        # go test ./p0001_two_sum
+make test P=batch-job RUN='TestRunBatch/Empty_task_list'   # one subtest; spaces become underscores
+make run P=1                                         # go run ./p0001_two_sum
+make check                                           # fmt, vet, test on ./...
+go test -race ./batch-job                            # no make target for -race
 ```
+
+`make fmt` and `make check` without `P` rewrite unformatted course files (`area`, `cards`, `http`, `map`). Use `make fmt P=<folder>` to limit the change.
 
 ## Adding a new problem
 
-1. Create a folder named `p` + the 4-digit LeetCode number + `_` + the snake_case title, for example `p0015_3sum/`.
-2. Put `package main`, the solution, and a `main()` in `main.go`.
-3. Put a table-driven test in `main_test.go` (`package main`, `t.Run` per case). Copy the pattern from `p0001_two_sum/main_test.go`.
-4. Optional: save the problem statement as `description.md`.
-5. Run `go run ./p0015_3sum` and `go test ./p0015_3sum`.
+Run `make new N=<number> T=<snake_case_title>` (for example `make new N=15 T=3sum`). It runs `new.sh`, which gets the real title from the LeetCode API and creates `p0015_3sum/` with `description.md`, `main.go`, and a `main_test.go` that fails until test cases are added. The full workflow for the user is in `README.md`. The test pattern to copy is `p0001_two_sum/main_test.go`.
 
 ## Conventions
 
